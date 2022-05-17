@@ -8,7 +8,7 @@ Board::Board () {
 void Board::displayBoard () {
     for (int i = 0; i < 9; i += 3) {
         std::cout << "-----------" << "\n";
-        std::cout << cells[i] << " | " << cells[i + 1] << " | " << cells[i + 2] << "\n";
+        std::cout << " " << cells[i] << " | " << cells[i + 1] << " | " << cells[i + 2] << "\n";
     }
     std::cout << "-----------" << std::endl;
 }

@@ -112,10 +112,11 @@ bool Game::start_game () {
         take_turn();
 
     if (has_a_win())
-        std::cout << "Congrats " << has_a_win()->getName() << "!" << std::endl;
+        std::cout << "=-=-=Congrats " << has_a_win()->getName() << "!=-=-=" << std::endl;
+    else
+        std::cout << "-------Cat's game! No winner.-------" << std::endl;
 
     board->displayBoard();
-
 
     return 0;
 }
