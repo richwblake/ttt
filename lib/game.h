@@ -11,9 +11,11 @@ class Game {
     Board * board;
     int turns = 0;
     public:
-        Game (Human &player1, Human &player2);
+        Game ();
         static std::vector<std::vector<int> > WIN_COMBOS;
         bool start_game ();
+        bool init ();
+        bool isValidInput (char c);
         Human * has_a_win ();
         int getTurnCount ();
         void take_turn ();
