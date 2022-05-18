@@ -1,6 +1,4 @@
 #include "game.h"
-#include "board.h"
-#include "human.h"
 #include <iostream>
 
 std::vector<std::vector<int> > Game::WIN_COMBOS = {
@@ -35,7 +33,7 @@ void Game::take_turn() {
     board->displayBoard();
     std::cout << "\n: ";
     int choice = -1;
-    while (!(std::cin >> choice) && (choice < 1 || choice > 9) || board->positionTaken(choice - 1)) {
+    while (!(std::cin >> choice) || (choice < 1 || choice > 9) || board->positionTaken(choice - 1)) {
         std::cout << "Please try again, with a valid position (1 - 9)\n: ";
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -51,9 +49,7 @@ Human * Game::has_a_win () {
         char b = board->getCells()[combo[1]];
         char c = board->getCells()[combo[2]];
 
-        if (a != ' ' && a == b && b == c && c == a) {
-            return p1->getToken() == a ? p1 : p2;
-        }
+        if (a != ' ' && a == b && b == c && c == a) return p1->getToken() == a ? p1 : p2;
     }
     return nullptr;
 }

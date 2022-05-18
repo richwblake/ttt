@@ -3,14 +3,15 @@
 #include <string>
 
 class Human {
-    std::string name;
-    int score;
-    char token;
+    private:
+        std::string name;
+        int score;
+        char token;
     public:
         Human (char token, std::string name);
+        std::string getName ();
         int getScore ();
         char getToken ();
-        std::string getName ();
 };
 
 #endif

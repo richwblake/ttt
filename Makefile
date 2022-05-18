@@ -1,24 +1,27 @@
-ttt_game : main.o human.o game.o board.o
-	clang++ -std=c++14 -Wall -Wextra human.o main.o game.o board.o -o ttt_game
-	mv ttt_game bin/
-	rm main.o game.o human.o board.o
-main.o : main.cpp
-	@echo "Creating"
-	clang++ -std=c++14 -Ilib/players -c lib/main.cpp
+CC = clang++
+CFLAGS = -Wall -Wextra -std=c++14
+TARGET = bin/ttt_game
+DEPS = main.o board.o human.o game.o
+INCLUDES = -Ilib/players
 
-human.o : human.cpp
-	clang++ -std=c++14 -c lib/players/human.cpp
+all: $(TARGET)
 
-game.o : game.cpp
-	clang++ -std=c++14 -c -Ilib/players lib/game.cpp
+$(TARGET): $(DEPS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(DEPS)
 
-board.o : board.cpp
-	clang++ -std=c++14 -c -Ilib/players lib/board.cpp
+main.o: lib/main.cpp
+	$(CC) $(INCLUDES) -c $(CFLAGS) lib/main.cpp
 
-board.cpp:
+board.o: lib/board.cpp
+	$(CC) $(INCLUDES) -c $(CFLAGS) lib/board.cpp
 
-game.cpp:
+game.o: lib/game.cpp
+	$(CC) $(INCLUDES) -c $(CFLAGS) lib/game.cpp
 
-main.cpp:
+human.o: lib/players/human.cpp
+	$(CC) -c $(CFLAGS) lib/players/human.cpp
 
-human.cpp:
+clean:
+	rm $(DEPS) $(TARGET)
+
+	

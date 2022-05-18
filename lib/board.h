@@ -4,7 +4,8 @@
 #include "human.h"
 
 class Board {
-    std::vector<char> cells;
+    private:
+        std::vector<char> cells;
     public:
         Board ();
         void displayBoard ();
