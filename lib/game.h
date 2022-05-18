@@ -12,6 +12,7 @@ class Game {
     int turns = 0;
     public:
         Game ();
+        ~Game ();
         static std::vector<std::vector<int> > WIN_COMBOS;
         bool start_game ();
         bool init ();

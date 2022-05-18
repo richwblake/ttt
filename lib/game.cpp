@@ -20,6 +20,12 @@ Game::Game () {
     this->board = new Board();
 }
 
+Game::~Game () {
+    delete p1;
+    delete p2;
+    delete board;
+}
+
 Human * Game::current_player () {
     return this->turns % 2 == 0 ? this->p1 : this->p2;
 }
@@ -35,33 +41,19 @@ void Game::take_turn() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
-    choice -= 1;
-
-    board->fillPosition(choice, *current_player());
-
+    board->fillPosition(choice - 1, *current_player());
     turns += 1; 
-
 }
 
 Human * Game::has_a_win () {
-    std::vector<char> cells = board->getCells();
-    Human * xPlayer;
-    Human * yPlayer;
-    if (p1->getToken() == 'X') {
-        xPlayer = p1;
-        yPlayer = p2;
-    } else {
-        xPlayer = p2;
-        yPlayer = p1;
-    }
-
     for (auto combo : WIN_COMBOS) {
-        char a = cells[combo[0]];
-        char b = cells[combo[1]];
-        char c = cells[combo[2]];
+        char a = board->getCells()[combo[0]];
+        char b = board->getCells()[combo[1]];
+        char c = board->getCells()[combo[2]];
 
-        if (a != ' ' && a == b && b == c && c == a)
-            return a == 'X' ? xPlayer : yPlayer;
+        if (a != ' ' && a == b && b == c && c == a) {
+            return p1->getToken() == a ? p1 : p2;
+        }
     }
     return nullptr;
 }
@@ -93,8 +85,8 @@ bool Game::init () {
     Human player1 (p1_token, p1name);
     Human player2 (p2_token, p2name);
 
-    this->p1 = &player1;
-    this->p2 = &player2;
+    this->p1 = new Human (p1_token, p1name);
+    this->p2 = new Human (p2_token, p2name);
 
     this->start_game();
 
