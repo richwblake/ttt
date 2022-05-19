@@ -1,4 +1,4 @@
-CC = clang++
+CC = g++
 CFLAGS = -Wall -Wextra -std=c++14
 TARGET = bin/ttt_game
 DEPS = main.o board.o human.o computer.o player.o game.o
