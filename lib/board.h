@@ -1,7 +1,6 @@
 #ifndef BOARD_H
 #define BOARD_H
 #include <vector>
-#include "human.h"
 
 class Board {
     private:
@@ -10,7 +9,7 @@ class Board {
         Board ();
         void displayBoard ();
         bool positionTaken (int index);
-        bool fillPosition (int index, Human& player);
+        bool fillPosition (int index, char token);
         bool isFull ();
         const std::vector<char>& getCells ();
 };

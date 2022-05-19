@@ -24,48 +24,44 @@ Game::~Game () {
     delete board;
 }
 
-Human * Game::current_player () {
+Player * Game::current_player () {
     return this->turns % 2 == 0 ? this->p1 : this->p2;
 }
 
 void Game::take_turn() {
-    std::cout << current_player()->getName() << ", it's your turn. Please enter a number between 1 and 9 to make a move (you are " << current_player()->getToken() << ")\n";  
+    std::cout << current_player()->get_name() << ", it's your turn. Please enter a number between 1 and 9 to make a move (you are " << current_player()->get_token() << ")\n";  
     board->displayBoard();
     std::cout << "\n: ";
-    int choice = -1;
-    while (!(std::cin >> choice) || (choice < 1 || choice > 9) || board->positionTaken(choice - 1)) {
-        std::cout << "Please try again, with a valid position (1 - 9)\n: ";
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }
 
-    board->fillPosition(choice - 1, *current_player());
+    int choice = current_player()->make_move(board) - 1;
+
+    board->fillPosition(choice, current_player()->get_token());
     turns += 1; 
 }
 
-Human * Game::has_a_win () {
+Player * Game::has_a_win () {
     for (auto combo : WIN_COMBOS) {
         char a = board->getCells()[combo[0]];
         char b = board->getCells()[combo[1]];
         char c = board->getCells()[combo[2]];
 
-        if (a != ' ' && a == b && b == c && c == a) return p1->getToken() == a ? p1 : p2;
+        if (a != ' ' && a == b && b == c && c == a) return p1->get_token() == a ? p1 : p2;
     }
     return nullptr;
 }
 
 bool Game::init () {
     char p1_token;
-    std::string p1name;
+    std::string p1_name;
     char p2_token;
-    std::string p2name;
+    std::string p2_name;
 
     std::cout << "Welcome to Tic-Tac-Toe.\n";
 
     std::cout << "Player 1, please enter your name: ";
-    std::cin >> p1name;
+    std::cin >> p1_name;
     std::cout << "Player 2, please enter your name: ";
-    std::cin >> p2name;
+    std::cin >> p2_name;
 
     std::cout << "Player 1, which token will you use? (X or O): ";
 
@@ -78,11 +74,8 @@ bool Game::init () {
 
     p2_token = p1_token == 'x' || p1_token == 'X' ? 'O' : 'X';
 
-    Human player1 (p1_token, p1name);
-    Human player2 (p2_token, p2name);
-
-    this->p1 = new Human (p1_token, p1name);
-    this->p2 = new Human (p2_token, p2name);
+    this->p1 = new Human (p1_name, p1_token);
+    this->p2 = new Human (p2_name, p2_token);
 
     this->start_game();
 
@@ -94,13 +87,13 @@ bool Game::isValidInput (char c) {
 }
 
 bool Game::start_game () {
-    std::cout << "Welcome " << this->p1->getName() << " and " << this->p2->getName() << "!" << std::endl;
+    std::cout << "Welcome " << this->p1->get_name() << " and " << this->p2->get_name() << "!" << std::endl;
 
     while (!board->isFull() && !has_a_win())
         take_turn();
 
     if (has_a_win())
-        std::cout << "=-=-=Congrats " << has_a_win()->getName() << "!=-=-=" << std::endl;
+        std::cout << "=-=-=Congrats " << has_a_win()->get_name() << "!=-=-=" << std::endl;
     else
         std::cout << "-------Cat's game! No winner.-------" << std::endl;
 

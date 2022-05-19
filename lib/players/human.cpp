@@ -1,22 +1,13 @@
 #include "human.h"
 
-Human::Human (char token, std::string name) {
-    this->score = 0;
-    this->name = name;
-    if (token == 'o' || token == 'x')
-        this->token = token - 32;
-    else
-        this->token = token;
-}
+int Human::make_move (Board * board) {
+    int choice = -1;
 
-int Human::getScore () {
-    return this->score;
-}
+    while (!(std::cin >> choice) || (choice < 1 || choice > 9) || board->positionTaken(choice - 1)) {
+        std::cout << "Please try again, with a valid position (1 - 9)\n: ";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
 
-char Human::getToken() {
-    return this->token;
-}
-
-std::string Human::getName () {
-    return this->name;
+    return choice;
 }

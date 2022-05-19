@@ -1,17 +1,11 @@
 #ifndef HUMAN_H
 #define HUMAN_H
-#include <string>
+#include "player.h"
 
-class Human {
-    private:
-        std::string name;
-        int score;
-        char token;
+class Human: public Player {
     public:
-        Human (char token, std::string name);
-        std::string getName ();
-        int getScore ();
-        char getToken ();
+        Human (std::string name, char token) : Player(name, token) { }
+        int make_move (Board * board);
 };
 
 #endif
