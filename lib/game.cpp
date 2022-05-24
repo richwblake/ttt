@@ -31,7 +31,6 @@ Player * Game::current_player () {
 void Game::take_turn() {
     std::cout << current_player()->get_name() << ", it's your turn. Please enter a number between 1 and 9 to make a move (you are " << current_player()->get_token() << ")\n";  
     board->displayBoard();
-    std::cout << "\n: ";
 
     int choice = current_player()->make_move(board) - 1;
 
@@ -55,27 +54,75 @@ bool Game::init () {
     std::string p1_name;
     char p2_token;
     std::string p2_name;
+    int player_num;
+    int usr_difficulty;
+    Difficulty difficulty = easy;
+
 
     std::cout << "Welcome to Tic-Tac-Toe.\n";
+    std::cout << "How many players are participating? (0, 1 or 2): ";
+    std::cin >> player_num;
 
-    std::cout << "Player 1, please enter your name: ";
-    std::cin >> p1_name;
-    std::cout << "Player 2, please enter your name: ";
-    std::cin >> p2_name;
+    if (player_num <= 1) {
+        std::cout << "Select the CPU difficulty (1 = easy, 2 = medium, 3 = hard): ";
+        std::cin >> usr_difficulty;
 
-    std::cout << "Player 1, which token will you use? (X or O): ";
+        switch (usr_difficulty) {
+        case 1:
+            difficulty = easy;
+            break;
+        case 2:
+            difficulty = medium;
+            break;
+        case 3:
+            difficulty = hard;
+            break;
+        default:
+            difficulty = easy;
+        }
+        std::cout << "Difficulty set to " << difficulty << std::endl;
+    }
 
 
-    while (!(std::cin >> p1_token) || !isValidInput(p1_token)) {
-        std::cout << "Please check your input, it must be X or O\n: ";
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }           
+    if (player_num == 0) {
+        p1_name = "CPU 1";
+        p2_name = "CPU 2";
+    } else if (player_num == 1) {
+        std::cout << "Player 1, please enter your name: ";
+        std::cin >> p1_name;
+        p2_name = "CPU";
+    } else {
+        std::cout << "Player 1, please enter your name: ";
+        std::cin >> p1_name;
+        std::cout << "Player 2, please enter your name: ";
+        std::cin >> p2_name;
+    }
+
+    if (player_num >= 1) {
+        std::cout << "Player 1, which token will you use? (X or O): ";
+
+        while (!(std::cin >> p1_token) || !isValidInput(p1_token)) {
+            std::cout << "Please check your input, it must be X or O\n: ";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }           
+    } else {
+        p1_token = 'X';
+    }
 
     p2_token = p1_token == 'x' || p1_token == 'X' ? 'O' : 'X';
+        
+    if (player_num == 1) {
+        this->p1 = new Human (p1_name, p1_token);
+        this->p2 = new Computer (p2_name, p2_token, difficulty);
+    } else if (player_num == 2) {
+        this->p1 = new Human (p1_name, p1_token);
+        this->p2 = new Human (p2_name, p2_token);
+    } else {
+        this->p1 = new Computer (p1_name, p1_token, difficulty);
+        this->p2 = new Computer (p2_name, p2_token, difficulty);
+    }
 
-    this->p1 = new Human (p1_name, p1_token);
-    this->p2 = new Human (p2_name, p2_token);
 
     this->start_game();
 
@@ -88,7 +135,6 @@ bool Game::isValidInput (char c) {
 
 bool Game::start_game () {
     std::cout << "Welcome " << this->p1->get_name() << " and " << this->p2->get_name() << "!" << std::endl;
-
     while (!board->isFull() && !has_a_win())
         take_turn();
 
